@@ -83,11 +83,46 @@ weight=pd.read_csv('data/bee_weight.csv', comment='#', header=0)
 sperm=pd.read_csv('data/bee_sperm.csv', comment='#', header=0)
 
 #b
-x_cont, y_cont = ecdf(weight.loc[weight["Treatment"]=="Control" ,["Weight"]])
-x_pest, y_pest = ecdf(weight.loc[weight["Treatment"]=="Pesticide" ,["Weight"]])
+c_weight=weight.loc[weight["Treatment"]=="Control" ,["Weight"]]
+p_weight=weight.loc[weight["Treatment"]=="Pesticide" ,["Weight"]]
+x_cont, y_cont = ecdf(c_weight)
+x_pest, y_pest = ecdf(p_weight)
 plt.plot(x_pest, y_pest, marker='.', linestyle='none')
 plt.plot(x_cont, y_cont, marker='.', linestyle='none')
 plt.show()
 #ECDF not working here
 
 #c
+np.mean(c_weight)
+np.mean(p_weight)
+
+# Number of replicas
+n_reps = 100000
+
+# Initialize bootstrap replicas array
+bs_c_weight = np.empty(n_reps)
+bs_p_weight = np.empty(n_reps)
+
+c_weight=weight.loc[weight["Treatment"]=="Control" ,["Weight"]]
+p_weight=weight.loc[weight["Treatment"]=="Pesticide" ,["Weight"]]
+p_weight=p_weight.as_matrix()
+c_weight=c_weight.as_matrix()
+p_weight=p_weight.flatten()
+c_weight=c_weight.flatten()
+
+# Compute replicates
+for i in range(n_reps):
+    bs_sample = np.random.choice(c_weight, replace=True, size=len(c_weight))
+    bs_c_weight[i] = np.std(bs_sample)
+
+conf_int_cont = np.percentile(bs_c_weight, [2.5, 97.5])
+
+
+for i in range(n_reps):
+    bs_sample = np.random.choice(p_weight, replace=True, size=len(p_weight))
+    bs_p_weight[i] = np.std(bs_sample)
+
+conf_int_pes = np.percentile(bs_p_weight, [2.5, 97.5])
+
+
+#4.3a
