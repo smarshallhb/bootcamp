@@ -15,7 +15,8 @@ gfp=data_txt[:,1]
 sem=data_txt[:,2]
 
 
-plt.plot(iptg,gfp,linestyle='none', marker='.', markersize=10)
+plt.plot(iptg,gfp,  marker='.', linestyle='none', markersize=10)
+
+plt.errorbar(iptg,gfp,xerr=None,yerr=sem, linestyle='none', markersize=10)
 plt.xscale('log')
-plt.errorbar(iptg,gfp,xerr=None,yerr=sem)
 plt.show()
