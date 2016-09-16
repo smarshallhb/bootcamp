@@ -85,6 +85,10 @@ sperm=pd.read_csv('data/bee_sperm.csv', comment='#', header=0)
 #b
 c_weight=weight.loc[weight["Treatment"]=="Control" ,["Weight"]]
 p_weight=weight.loc[weight["Treatment"]=="Pesticide" ,["Weight"]]
+p_weight=p_weight.as_matrix()
+c_weight=c_weight.as_matrix()
+p_weight=p_weight.flatten()
+c_weight=c_weight.flatten()
 x_cont, y_cont = ecdf(c_weight)
 x_pest, y_pest = ecdf(p_weight)
 plt.plot(x_pest, y_pest, marker='.', linestyle='none')
